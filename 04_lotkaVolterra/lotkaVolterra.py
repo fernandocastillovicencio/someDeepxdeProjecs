@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 from scipy import integrate
 from deepxde.backend import tf
 
+# set current directory
+import os
+os.chdir('04_lotkaVolterra')
+
 """ 
 01
 ub: upper bound
@@ -105,8 +109,30 @@ losshistory, train_state = model.train()
 dde.saveplot(losshistory,train_state,issave=True,isplot=True)
 
 # 11 plot: https://deepxde.readthedocs.io/en/latest/demos/pinn_forward/lotka.volterra.html
+# check the size
+def func(t, r):
+    x, y = r
+    dx_t = 1 / ub * rb * (2.0 * ub * x - 0.04 * ub * x * ub * y)
+    dy_t = 1 / ub * rb * (0.02 * ub * x * ub * y - 1.06 * ub * y)
+    return dx_t, dy_t
+
+
+def gen_truedata():
+    t = np.linspace(0, 1, 100)
+
+    sol = integrate.solve_ivp(func, (0, 10), (100 / ub, 15 / ub), t_eval=t)
+    x_true, y_true = sol.y
+    x_true = x_true.reshape(100, 1)
+    y_true = y_true.reshape(100, 1)
+
+    return x_true, y_true
+
+
+
 plt.xlabel("t")
 plt.ylabel("population")
+
+
 
 t = np.linspace(0, 1, 100)
 x_true, y_true = gen_truedata()
