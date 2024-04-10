@@ -1,3 +1,7 @@
 *.dat
+*.txt
+*.gif
 *.train
 *.test
+*.ckpt*
+checkpoint
