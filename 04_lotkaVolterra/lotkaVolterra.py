@@ -103,3 +103,22 @@ After training with Adam, we continue with L-BFGS to have a ever smaller loss
 model.compile("L-BFGS")
 losshistory, train_state = model.train()
 dde.saveplot(losshistory,train_state,issave=True,isplot=True)
+
+# 11 plot: https://deepxde.readthedocs.io/en/latest/demos/pinn_forward/lotka.volterra.html
+plt.xlabel("t")
+plt.ylabel("population")
+
+t = np.linspace(0, 1, 100)
+x_true, y_true = gen_truedata()
+plt.plot(t, x_true, color="black", label="x_true")
+plt.plot(t, y_true, color="blue", label="y_true")
+
+t = t.reshape(100, 1)
+sol_pred = model.predict(t)
+x_pred = sol_pred[:, 0:1]
+y_pred = sol_pred[:, 1:2]
+
+plt.plot(t, x_pred, color="red", linestyle="dashed", label="x_pred")
+plt.plot(t, y_pred, color="orange", linestyle="dashed", label="y_pred")
+plt.legend()
+plt.show()
